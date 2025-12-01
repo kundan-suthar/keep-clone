@@ -42,7 +42,7 @@ const AuthPage = () => {
           <h1 className="text-2xl font-medium mb-2">
             {isSignUp ? "Create your account" : "Sign in"}
           </h1>
-          <p className="text-gray-500 text-sm">to continue to KeepClone AI</p>
+          <p className="text-gray-500 text-sm">to continue to NoteKepper AI</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
