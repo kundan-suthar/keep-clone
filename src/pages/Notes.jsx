@@ -12,7 +12,7 @@ export default function NotesList() {
     return [
       {
         id: "welcome-note",
-        title: "Welcome to KeepClone AI!",
+        title: "Welcome to NoteKeeper AI!",
         content:
           "This is a demo of a notes app powered by Gemini.\n\nTry clicking the sparkles icon ✨ when editing a note to use AI features like summarizing or grammar fixing.",
         isPinned: true,
