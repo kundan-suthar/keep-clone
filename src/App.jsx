@@ -4,8 +4,12 @@ import Public from "./pages/Public";
 import AuthPage from "./pages/AuthPage";
 import DashLayout from "./components/DashLayout";
 import NotesList from "./pages/Notes";
-
+import { setupInterceptors } from "./api/client";
+import { useEffect } from "react";
 function App() {
+  useEffect(() => {
+    setupInterceptors();
+  }, []);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

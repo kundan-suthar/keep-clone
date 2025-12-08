@@ -1,4 +1,5 @@
-import { loginApi } from "../../api/endPoints/authApi";
+import axiosClient from "../../api/client";
+import { loginApi, logoutApi } from "../../api/endPoints/authApi";
 
 export const createAuthSlice = (set, get) => ({
   user: null,
@@ -24,11 +25,21 @@ export const createAuthSlice = (set, get) => ({
       isAuthenticated: true,
       loading: false,
     });
+  },
+  refreshAccessToken: async () => {
+    try {
+      const res = await axiosClient.post("/api/v1/users/refresh-token");
+      const newToken = res.data.data.accessToken;
 
-    localStorage.setItem("authToken", data.data.accessToken);
-    localStorage.setItem("authUser", JSON.stringify(data.data.user));
+      set({ accessToken: newToken, isAuthenticated: true });
+      return newToken;
+    } catch (err) {
+      set({ accessToken: null, isAuthenticated: false });
+      return null;
+    }
   },
   logout: async () => {
+    logoutApi();
     set({
       user: null,
       token: null,

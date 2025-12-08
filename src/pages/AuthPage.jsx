@@ -1,5 +1,5 @@
 import { ArrowLeft, Mail, Lock, User, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "../store/useStore";
 const AuthPage = () => {
@@ -13,13 +13,13 @@ const AuthPage = () => {
   const loading = useAppStore((state) => state.registerLoading);
   const error = useAppStore((state) => state.registerError);
   const registerSuccess = useAppStore((state) => state.registerError);
-
   const login = useAppStore((state) => state.login);
   // const token: null,
   // const isAuthenticated: null,
   const loginLoading = useAppStore((state) => state.loading);
   const loginError = useAppStore((state) => state.error);
   const isAuthenticated = useAppStore((state) => state.isAuthenticated);
+  const refreshAccessToken = useAppStore((state) => state.refreshAccessToken);
 
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
@@ -47,7 +47,13 @@ const AuthPage = () => {
   const onBack = () => {
     navigate("/");
   };
-
+  useEffect(() => {
+    const refresh = async () => {
+      await refreshAccessToken();
+    };
+    refresh();
+    isAuthenticated && navigate("/dash/notes");
+  }, [isAuthenticated]);
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4 font-sans text-[#202124]">
       {/* Back Button */}

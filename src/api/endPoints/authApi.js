@@ -7,3 +7,6 @@ export const loginApi = (payload) =>
 
 export const getProfileApi = () =>
   baseQuery(() => axiosClient.get("/auth/profile"));
+
+export const logoutApi = () =>
+  baseQuery(() => axiosClient.post("/api/v1/users/login"));
