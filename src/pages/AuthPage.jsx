@@ -14,6 +14,13 @@ const AuthPage = () => {
   const error = useAppStore((state) => state.registerError);
   const registerSuccess = useAppStore((state) => state.registerError);
 
+  const login = useAppStore((state) => state.login);
+  // const token: null,
+  // const isAuthenticated: null,
+  const loginLoading = useAppStore((state) => state.loading);
+  const loginError = useAppStore((state) => state.error);
+  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
+
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,9 +31,17 @@ const AuthPage = () => {
         email,
         password,
       });
+    } else {
+      await login({
+        email,
+        password,
+      });
     }
     if (registerSuccess) {
-      navigate("/notes"); // auto-login handled in slice
+      navigate("/dash/notes"); // auto-login handled in slice
+    }
+    if (isAuthenticated) {
+      navigate("/dash/notes"); // auto-login handled in slice
     }
   };
   const onBack = () => {

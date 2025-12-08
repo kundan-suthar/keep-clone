@@ -13,16 +13,20 @@ export const createAuthSlice = (set, get) => ({
       set({ error, loading: false });
       return;
     }
+    console.log("log complete data ", data);
+    console.log("log access token ", data.data.accessToken);
+    console.log("log refresh token ", data.data.refreshToken);
+    console.log("log user ", data.data.user);
 
     set({
-      user: data.user,
-      token: data.token,
+      user: data.data.user,
+      token: data.data.accessToken,
       isAuthenticated: true,
       loading: false,
     });
 
-    localStorage.setItem("authToken", data.token);
-    localStorage.setItem("authUser", JSON.stringify(data.user));
+    localStorage.setItem("authToken", data.data.accessToken);
+    localStorage.setItem("authUser", JSON.stringify(data.data.user));
   },
   logout: async () => {
     set({

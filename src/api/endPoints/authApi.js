@@ -3,7 +3,7 @@ import axiosClient from "../client";
 import { baseQuery } from "../baseQuery";
 
 export const loginApi = (payload) =>
-  baseQuery(() => axiosClient.post("/auth/login", payload));
+  baseQuery(() => axiosClient.post("/api/v1/users/login", payload));
 
 export const getProfileApi = () =>
   baseQuery(() => axiosClient.get("/auth/profile"));
