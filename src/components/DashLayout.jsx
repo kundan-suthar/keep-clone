@@ -2,14 +2,20 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import { useAppStore } from "../store/useStore";
 
 export default function DashLayout() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const isSidebarOpen = useAppStore((state) => state.isSidebarOpen);
+  const toggleSidebar = useAppStore((state) => state.toggleSidebar);
   const [searchQuery, setSearchQuery] = useState("");
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const [activeTab, setActiveTab] = useState("notes");
+
   return (
-    <div className="min-h-screen bg-white font-sans pt-20 sm:pt-24 pl-24 sm:pl-80">
+    <div
+      className={`min-h-screen bg-white font-sans ${
+        isSidebarOpen ? "pt-24 pl-80" : "pt-20  pl-24 "
+      }  transition-all duration-300`}
+    >
       <Header
         toggleSidebar={toggleSidebar}
         searchQuery={searchQuery}

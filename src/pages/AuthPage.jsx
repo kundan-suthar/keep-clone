@@ -1,23 +1,33 @@
 import { ArrowLeft, Mail, Lock, User, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppStore } from "../store/useStore";
 const AuthPage = () => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [fullName, setFullName] = useState("");
+
+  const registerUser = useAppStore((state) => state.registerUser);
+  const loading = useAppStore((state) => state.registerLoading);
+  const error = useAppStore((state) => state.registerError);
+  const registerSuccess = useAppStore((state) => state.registerError);
 
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-
-    // Simulate network delay for auth
-    setTimeout(() => {
-      setIsLoading(false);
-      onLogin();
-    }, 800);
+    if (isSignUp) {
+      await registerUser({
+        fullName: fullName,
+        username: name,
+        email,
+        password,
+      });
+    }
+    if (registerSuccess) {
+      navigate("/notes"); // auto-login handled in slice
+    }
   };
   const onBack = () => {
     navigate("/");
@@ -44,28 +54,49 @@ const AuthPage = () => {
           </h1>
           <p className="text-gray-500 text-sm">to continue to NoteKepper AI</p>
         </div>
-
+        {error && <p className="text-red-500 text-center mb-3">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-6">
           {isSignUp && (
-            <div className="space-y-1">
-              <div className="relative group">
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="peer w-full px-3 py-3 rounded border border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition-all placeholder-transparent"
-                  id="name"
-                  placeholder="Name"
-                />
-                <label
-                  htmlFor="name"
-                  className="absolute left-2 -top-2.5 bg-white px-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-blue-600"
-                >
-                  Name
-                </label>
+            <>
+              <div className="space-y-1">
+                <div className="relative group">
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="peer w-full px-3 py-3 rounded border border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition-all placeholder-transparent"
+                    id="userName"
+                    placeholder="userName"
+                  />
+                  <label
+                    htmlFor="userName"
+                    className="absolute left-2 -top-2.5 bg-white px-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-blue-600"
+                  >
+                    Username
+                  </label>
+                </div>
               </div>
-            </div>
+              <div className="space-y-1">
+                <div className="relative group">
+                  <input
+                    type="text"
+                    required
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="peer w-full px-3 py-3 rounded border border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition-all placeholder-transparent"
+                    id="fullName"
+                    placeholder="NafullNameme"
+                  />
+                  <label
+                    htmlFor="fullName"
+                    className="absolute left-2 -top-2.5 bg-white px-1 text-xs text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-blue-600"
+                  >
+                    Full Name
+                  </label>
+                </div>
+              </div>
+            </>
           )}
 
           <div className="space-y-1">
@@ -119,12 +150,12 @@ const AuthPage = () => {
 
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={loading}
               className={`bg-blue-600 text-white px-6 py-2 rounded font-medium hover:bg-blue-700 transition-all shadow-sm flex items-center ${
-                isLoading ? "opacity-70 cursor-not-allowed" : ""
+                loading ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
-              {isLoading ? (
+              {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
               ) : null}
               {isSignUp ? "Sign up" : "Next"}
