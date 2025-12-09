@@ -9,4 +9,4 @@ export const getProfileApi = () =>
   baseQuery(() => axiosClient.get("/auth/profile"));
 
 export const logoutApi = () =>
-  baseQuery(() => axiosClient.post("/api/v1/users/login"));
+  baseQuery(() => axiosClient.post("/api/v1/users/logout"));

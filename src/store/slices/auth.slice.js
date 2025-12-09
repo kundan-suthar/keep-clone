@@ -30,20 +30,26 @@ export const createAuthSlice = (set, get) => ({
     try {
       const res = await axiosClient.post("/api/v1/users/refresh-token");
       const newToken = res.data.data.accessToken;
-
-      set({ accessToken: newToken, isAuthenticated: true });
+      const user = res.data.data.user;
+      set({ token: newToken, isAuthenticated: true, user: user });
       return newToken;
     } catch (err) {
-      set({ accessToken: null, isAuthenticated: false });
+      set({ token: null, isAuthenticated: false });
       return null;
     }
   },
   logout: async () => {
-    logoutApi();
-    set({
-      user: null,
-      token: null,
-      isAuthenticated: null,
-    });
+    try {
+      await logoutApi();
+    } catch (error) {
+      console.error("Logout API failed:", error);
+    } finally {
+      // Always clear local state
+      set({
+        user: null,
+        token: null,
+        isAuthenticated: false,
+      });
+    }
   },
 });

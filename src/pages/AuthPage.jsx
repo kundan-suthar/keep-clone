@@ -48,10 +48,7 @@ const AuthPage = () => {
     navigate("/");
   };
   useEffect(() => {
-    const refresh = async () => {
-      await refreshAccessToken();
-    };
-    refresh();
+
     isAuthenticated && navigate("/dash/notes");
   }, [isAuthenticated]);
   return (
@@ -172,9 +169,8 @@ const AuthPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`bg-blue-600 text-white px-6 py-2 rounded font-medium hover:bg-blue-700 transition-all shadow-sm flex items-center ${
-                loading ? "opacity-70 cursor-not-allowed" : ""
-              }`}
+              className={`bg-blue-600 text-white px-6 py-2 rounded font-medium hover:bg-blue-700 transition-all shadow-sm flex items-center ${loading ? "opacity-70 cursor-not-allowed" : ""
+                }`}
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
