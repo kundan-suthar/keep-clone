@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import NoteCard from "../components/NoteCard";
 import CreateNote from "../components/CreateNote";
+import EditNote from "../components/EditNote";
 import { Lightbulb } from "lucide-react";
 
 export default function NotesList() {
@@ -30,6 +31,12 @@ export default function NotesList() {
     // We'll just delete it for simplicity in this specific "landing page" scope
     // or we could add an 'isArchived' flag to the type. Let's assume delete for now.
     setNotes(notes.filter((n) => n.id !== id));
+  };
+
+  const updateNote = (updatedNote) => {
+    setNotes((prevNotes) =>
+      prevNotes.map((n) => (n.id === updatedNote.id ? updatedNote : n))
+    );
   };
 
   const pinNote = (id) => {
@@ -116,6 +123,14 @@ export default function NotesList() {
             ))}
           </div>
         </div>
+      )}
+
+      {editingNote && (
+        <EditNote
+          note={editingNote}
+          onSave={updateNote}
+          onClose={() => setEditingNote(null)}
+        />
       )}
     </div>
   );
